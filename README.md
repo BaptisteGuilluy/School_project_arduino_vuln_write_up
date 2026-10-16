@@ -65,5 +65,10 @@ graph TD
     C1 --> C1a[Mesure du temps de comparaison du PIN]
 ```
  
+## vulnerability-severity-assessment 
 
+Using online calculator we can see the CVSS V4.0 score of the potential vulnerability is ~1.9/2. The Consequences are quite variable depending of the type of machine we get into but as the method to epxloit that vulnerability are already documented the score is not so high.
+
+
+## attacks-description-and-implementation 
  
