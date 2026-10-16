@@ -67,8 +67,27 @@ graph TD
  
 ## vulnerability-severity-assessment 
 
-Using online calculator we can see the CVSS V4.0 score of the potential vulnerability is ~1.9/2. The Consequences are quite variable depending of the type of machine we get into but as the method to epxloit that vulnerability are already documented the score is not so high.
+Using online calculator we can see the CVSS V4.0 score of the potential vulnerability is ~1.9/2. The Consequences are quite variable depending of the type of machine we get into, but, as the method that exploit this vulnerability are already documented the score is not so high.
+  
+---
+ 
+## Attack(s) description and implementation
+ 
+### _Correlation power analysis_
+ 
+**Requirements** : _physical entry point , microC specialized device like chipwhisperer
+ 
+#### Principle
+ 
+_l'attaque est simple,puisqu'elle repose sur quelques points. En premier lieu il a été nécessaire de définir les entry points de la target, puisque celle-ci ne permettait de pouvoir entrer par le port usb il a fallu utiliser un analyseur logique pour lors du reset du microC voir si des trames existaient. 
+ 
+#### Summary of the exploit
+ 
+1. _stage 1 : Montage_
+2. _stage 2 : analysis_
+3. _stage 3 : data processing_
+4. _stage 4 : exploit_
 
 
-## attacks-description-and-implementation 
+
  
