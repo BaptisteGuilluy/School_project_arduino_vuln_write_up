@@ -35,13 +35,13 @@
 <img width="947" height="623" alt="image" src="https://github.com/user-attachments/assets/c6e742ed-ce80-40ea-b748-0fdbfd3ac194" />
 
  
-![Schéma du montage](docs/images/setup.png)
+![Schéma du montage](Pictures/setup.png)
  
 ---
  
 ## Asset description
 
-| Asset | Localisation | Confidentialité |
+| Asset | Location | Confidentiality |
 |---|---|---|
 |key entry location | in one of the entry point | medium as limited by the number of interface |
 | Keys | in the µC | high |
@@ -56,30 +56,36 @@ Objectif de l'attaquant : **This write-up is educational so the goal is just to 
  
 ```mermaid
 graph TD
-    A[Objectif : récupérer le secret] --> B[Accès physique]
-    A --> C[Attaque par canal auxiliaire]
-    B --> B1[Lecture de la mémoire via ICSP]
-    B --> B2[Extraction du firmware via bootloader]
-    C --> C1[Timing attack]
-    C --> C2[Analyse de consommation]
-    C1 --> C1a[Mesure du temps de comparaison du PIN]
+    A[Objectif : récupérer le secret] --> B[Attaque par canal auxiliaire]
+
+    B --> C1[Analyse de consommation]
+    C1 --> C1a[SPA]
+    C1a --> C1aa[DPA]
+    C1aa --> C1aaa[HASH and SALT]
 ```
  
-## vulnerability-severity-assessment 
+## Vulnerability-Severity-Assessment 
 
-Using online calculator we can see the CVSS V4.0 score of the potential vulnerability is ~1.9/2. The Consequences are quite variable depending of the type of machine we get into, but, as the method that exploit this vulnerability are already documented the score is not so high.
-  
+Using online calculator we can see the CVSS V4.0 score of the potential vulnerability is 7.2. The Consequences are quite variable depending of the type of machine we get into even so this a proof of concept, the ease of use the exploit make this number high.
+
+To obtain this number, I've used this site : https://nvd.nist.gov/vuln-metrics/cvss/v4-calculator, and considered this : CVSS:4.0/AV:P/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:N/E:P/MAV:P/MAC:L/MAT:N/MPR:N/MUI:N/MVC:H/MVI:H/MVA:H/R:U/V:D/RE:M   feel free to see for yourself and discuss it if you disagree.
+
 ---
  
 ## Attack(s) description and implementation
  
-### _Correlation power analysis_
+### _Simple power analysis_
  
-**Requirements** : _physical entry point , microC specialized device like chipwhisperer
+**Requirements** : _physical entry point , microC specialized device like chipwhisperer_
  
 #### Principle
  
-_l'attaque est simple,puisqu'elle repose sur quelques points. En premier lieu il a été nécessaire de définir les entry points de la target, puisque celle-ci ne permettait de pouvoir entrer par le port usb il a fallu utiliser un analyseur logique pour lors du reset du microC voir si des trames existaient. 
+_le premier type d'attaque que j'ai réalisé a été une simple Simple power analysis. En se connectant au microcontrôleur avec le montage comme sur la photo au dessus on peut apercevoir sur  la figure ci-dessous, le tracé orange correspondant une série de 200 test d'envoie de mot de passe dans le microcontrolleur._
+
+The simple power analysis goal is to first caractherize the system. By using the montage shown, we can using the chipwhisperer board sample a lot of imformation from the µC. doing so we can obtain the orange trace over the next picture revealing a little of the internal functionning. We see 
+
+![Affichage visuel d'une série d'échantillon (200) effectué par la chipwhisperer ](images/comparaison200.png)
+
  
 #### Summary of the exploit
  
