@@ -5,7 +5,7 @@
 #include <SHA3.h>
 
 const char PASSWORD[] = "f7-@Jp0w";
-const char HASH_PASSWORD[] = "caoicahcccebiria"
+const char HASH_PASSWORD[] = "caoicahcccebiria";
 //const char PASSWORD[] = "password";
 const char *secret = "Je suis une petite tortue";
 const int salt_size = 4;
@@ -58,21 +58,23 @@ String readLine(Stream &s) {
   }
   return str;
 }
+
 String hash(const char *attempt) {
   uint32_t hash_attempt = 2166136261UL;          // offset
   for (size_t i = 0; attempt[i] != '\0'; ++i) {
     hash_attempt ^= (uint8_t)attempt[i];
-    hash_attempt *= 16777619UL;                  
+    hash_attempt *= 16777619UL;                 
   }
   return String(hash_attempt);
 }
+
 // Early-exit, character-by-character comparison
 bool early_exit_compare(const char *attempt) {
   String attempt_hash = hash(attempt);
   const char *a = attempt_hash.c_str();
-  const char *p = PASSWORD_HASH.c_str();
+  const char *p = HASH_PASSWORD;
 
-  size_t pass_len = PASSWORD_HASH.length();
+  size_t pass_len = strlen(HASH_PASSWORD);
 
   for (size_t i = 0; i < pass_len; ++i) {
     if (a[i] == '\0') return false;    
