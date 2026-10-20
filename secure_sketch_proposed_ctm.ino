@@ -5,6 +5,7 @@
 #include <SHA3.h>
 
 const char PASSWORD[] = "f7-@Jp0w";
+const char HASH_PASSWORD[] = "caoicahcccebiria"
 //const char PASSWORD[] = "password";
 const char *secret = "Je suis une petite tortue";
 const int salt_size = 4;
@@ -57,22 +58,27 @@ String readLine(Stream &s) {
   }
   return str;
 }
-
+String hash(const char *attempt) {
+  uint32_t hash_attempt = 2166136261UL;          // offset
+  for (size_t i = 0; attempt[i] != '\0'; ++i) {
+    hash_attempt ^= (uint8_t)attempt[i];
+    hash_attempt *= 16777619UL;                  
+  }
+  return String(hash_attempt);
+}
 // Early-exit, character-by-character comparison
 bool early_exit_compare(const char *attempt) {
-  size_t pass_len = sizeof(PASSWORD) - 1; // exclude terminating NUL
+  String attempt_hash = hash(attempt);
+  const char *a = attempt_hash.c_str();
+  const char *p = PASSWORD_HASH.c_str();
+
+  size_t pass_len = PASSWORD_HASH.length();
+
   for (size_t i = 0; i < pass_len; ++i) {
-    /*Serial.print("Character from password: '");
-    Serial.print(PASSWORD[i]);
-    Serial.print("', attempt: '");/home/dlh/ECAM/Cours/5MEO Embedded Security/Course/00/ES5T_00/resource/ES5_CM0_code_naif.ino
-    Serial.print(attempt[i]);
-    Serial.println("'");*/
-    // if attempt ended early or characters differ -> fail immediately
-    if (attempt[i] == '\0') return false;
-    if (attempt[i] != PASSWORD[i]) return false;
-    //delayMicroseconds(50);
+    if (a[i] == '\0') return false;    
+    if (a[i] != p[i]) return false;
   }
-  // ensure attempt has no extra characters
+
   return true;
 }
 
