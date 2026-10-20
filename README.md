@@ -11,6 +11,7 @@
 5. [Attack(s) description and implementation](#attacks-description-and-implementation)
 6. [Proposed counter-measure(s)](#proposed-counter-measures)
 7. [Références](#références)
+   
 ---
  
 ## Hardware
@@ -35,7 +36,7 @@
 <img width="947" height="623" alt="image" src="https://github.com/user-attachments/assets/c6e742ed-ce80-40ea-b748-0fdbfd3ac194" />
 
  
-![Schéma du montage](Pictures/setup.png)
+
  
 ---
  
@@ -57,11 +58,9 @@ Objectif de l'attaquant : **This write-up is educational so the goal is just to 
 ```mermaid
 graph TD
     A[Objectif : récupérer le secret] --> B[Attaque par canal auxiliaire]
-
     B --> C1[Analyse de consommation]
     C1 --> C1a[SPA]
-    C1a --> C1aa[DPA]
-    C1aa --> C1aaa[HASH and SALT]
+    C1a --> C1aa[HASH and SALT]
 ```
  
 ## Vulnerability-Severity-Assessment 
@@ -80,19 +79,16 @@ To obtain this number, I've used this site : https://nvd.nist.gov/vuln-metrics/c
  
 #### Principle
  
-_le premier type d'attaque que j'ai réalisé a été une simple Simple power analysis. En se connectant au microcontrôleur avec le montage comme sur la photo au dessus on peut apercevoir sur  la figure ci-dessous, le tracé orange correspondant une série de 200 test d'envoie de mot de passe dans le microcontrolleur._
 
-The simple power analysis goal is to first caractherize the system. By using the montage shown, we can using the chipwhisperer board sample a lot of imformation from the µC. doing so we can obtain the orange trace over the next picture revealing a little of the internal functionning. We see 
-
-![Affichage visuel d'une série d'échantillon (200) effectué par la chipwhisperer ](images/comparaison200.png)
+The simple power analysis goal is to first caractherize the system. By using the montage shown, we can using the chipwhisperer board sample a lot of imformation from the µC. Doing so we can obtain the orange trace over the next picture revealing a little of the internal functionning. By hypothesis we can assume that the verification will occur at the peak between 1600 - 1900 and check for multiple password check the hypothesis. The blue trace is a password check with the first letter correct (given as hint by our instructor). We can see that the behavior of the trace do not change  but get a less high peak at our hypothethical verification moment, meaning the code react to it, meaning multiple thing like : early-exit or hamming weight correlation or whatever. This peak will act as our **leak**.
 
  
-#### Summary of the exploit
- 
-1. _stage 1 : Montage_
-2. _stage 2 : analysis_
-3. _stage 3 : data processing_
-4. _stage 4 : exploit_
+<img width="947" height="623" alt="image" src="images/comp200 2.png" />
+
+## Proposed counter-measure
+
+
+## Reference
 
 
 
