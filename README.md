@@ -9,7 +9,7 @@
 3. [Attack tree](#attack-tree)
 4. [Vulnerability severity assessment](#vulnerability-severity-assessment)
 5. [Attack(s) description and implementation](#attacks-description-and-implementation)
-6. [Proposed counter-measure(s)](#Proposed-counter-measures)
+6. [Proposed counter-measure](#Proposed-counter-measures)
 7. [References](#references)
    
 ---
@@ -102,7 +102,7 @@ Alternatives we could also not use any early exit code to change the behavior of
 <img width="600" height="623" alt="image" src="images/countermeasfinal1.png" />
 <img width="600" height="623" alt="image" src="images/countermeasfinal2.png" />
 
-## Reference
+## References
 
 - https://github.com/parastuffs/Embedded-Security/wiki/Connecting-to-an-external-target
 - https://chipwhisperer.readthedocs.io/en/latest/Capture/20-pin-connector.html
