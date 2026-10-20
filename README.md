@@ -62,8 +62,7 @@ graph TD
     A[goal : get the secret] --> B[Side channel attack]
     B --> C1[Comsommation analysis]
     C1 --> C1a[SPA]
-    C1a -. Hashing of the password .-> C1aa
-    C1aa --> C1aaa[HASH and SALT]
+    C1a -. Hashing of the password X-> C1aa[HASH and SALT]
 ```
  
 ## Vulnerability-Severity-Assessment 
