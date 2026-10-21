@@ -9,8 +9,9 @@
 3. [Attack tree](#attack-tree)
 4. [Vulnerability severity assessment](#vulnerability-severity-assessment)
 5. [Attack(s) description and implementation](#attacks-description-and-implementation)
-6. [Proposed counter-measure](#Proposed-counter-measures)
-7. [References](#references)
+6. [Proposed counter-measure](#Proposed-counter-measure)
+7. [Code usage](#code-usage)
+8. [References](#references)
    
 ---
  
@@ -35,9 +36,9 @@
  
 <img width="947" height="623" alt="image" src="https://github.com/user-attachments/assets/c6e742ed-ce80-40ea-b748-0fdbfd3ac194" />
 
- le montage au dessus permet plusieurs choses. En premier lieu, cela permet de déplacer le µC vers la breadboard afin de pouvoir se connecter directement au pin 16 et 17 qui agiront ici comme RX et TX. On peut utiliser la pin 7 comme pin de mesure (la pin au milieu de l'ilot des 3 pins ou measure est marqué devant) pour le module chipwhisperer en y branchant un shunt pour y observer la mesure de puissance. La pin 19 du µC permettra de générer le signaux trigger nécessaire à la pin 16 du module chipwhisperer. La pin 16 du module est dédié au entré trigger et la pin 19 correspond en fait à la pin 13 de l'arduino uno, determiné via l'analyseur logique (C'est celui-ci qui nous aura permis de determiner les pins 16 et 17 quant à la connexion UART). Ces pins n'ont pas été modifié afin d'éviter de générer des problèmes à cause du code. le reste du montage est nécessaire afin d'alimenter les différents modules et les valeurs de capacités ont été déterminés via ce github : https://github.com/parastuffs/Embedded-Security/wiki/Connecting-to-an-external-target . 
+The setup shown above serves several purposes. First, it allows the microcontroller (µC) to be moved to the breadboard, enabling direct connections to pins 16 and 17, which function here as RX and TX. Pin 7 (located in the middle of the three-pin cluster labeled "measure") can be used for the ChipWhisperer module; by connecting a shunt here, one can observe power measurements. Pin 19 of the microcontroller is used to generate the trigger signals required by pin 16 of the ChipWhisperer module. Pin 16 on the module is the dedicated trigger input, and pin 19 on the microcontroller corresponds to pin 13 on the Arduino Uno ( mapping identified using a logic analyzer, which was also used to determine that pins 16 and 17 are for the UART connection). These pin assignments were left unchanged to avoid potential issues with the code. The remainder of the setup is required to power the various modules, and the capacitor values ​​were determined based on this GitHub repository: https://github.com/parastuffs/Embedded-Security/wiki/Connecting-to-an-external-target.
 
- Ce montage ne sera pas modifié durant l'exploit car celui-ci sera entièrement suffisant.
+This setup will not be altered during the exploit, as it is entirely sufficient for the task.
  
  
 ---
@@ -59,10 +60,10 @@ GOAL : **This write-up is educational so the goal is just to get into the arduin
  
 ```mermaid
 graph TD
-    A[goal : get the secret] --> B[Side channel attack]
-    B --> C1[Comsommation analysis]
+    A["Goal : get the secret"] --> B[Side channel attack]
+    B --> C1[Consumption analysis]
     C1 --> C1a[SPA]
-    C1a -. Hashing of the password -> C1aa[HASH and SALT]
+    C1a --x|"Hashing of the password"| C1aa["HASH and SALT"]
 ```
  
 ## Vulnerability-Severity-Assessment 
@@ -100,6 +101,16 @@ Alternatives we could also not use any early exit code to change the behavior of
 
 <img width="600" height="623" alt="image" src="images/countermeasfinal1.png" />
 <img width="600" height="623" alt="image" src="images/countermeasfinal2.png" />
+
+## Code usage
+
+To implement the attack, I've first used the trigger_test.ipynb file. Using simple chipwhisperer function like scope.write() and scope.capture() we can write things to the target and obtain the power response from it. I've used a basic configuration with scope.default_setup() and a baudrate of 9600. This file as you would have guessed is just to see if the chipwhisperer see the trigger activation when we enter a password.
+
+Next to define the timing of the leak, I've used the POI_test.ipynb file to test lot of inputs to obtain a good approximation of the power response shape. By sending multiples good and bad input just like the trigger_test file we can do that. A little delay over the scope with time.sleep(0.1) or 0.05 is neccessary as the scope has the bad habit of timing out (surely cause of the noise induced by the breadboard). With plt.xlim() we can zoom over the POI, point of interest, over the trace (our leak as explained).
+A little funny thing observed have been the fact the two trace are dephased by a little, maybe its cause of the internal functionning of the chipwhisperer but as of now I'm not really sure.
+
+The testSPAfinal.ipynb is the file where we will try to anticipate the next byte of the password. Using the POI area we've found just before we can reduce the noise over the mean value of the trace that we compute using the same method as above. The find_next_byte method goal is to create a fake template based over a character we know isn't in the password. This fake template will act like a reference of the most bad character that we could have guess. So by computing the distance between the mean value of the bad template and the mean value of any other character template we can get an accurate prediction of the next character of the password. The precision is quite good as over multiple try, the character has always been the correct meaning the setup is quite robust for this case.
+
 
 ## References
 
