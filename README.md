@@ -87,7 +87,7 @@ The testSPAfinal.ipynb is the file where we will try to anticipate the next byte
 
 ## Proposed counter-measure
 
-To counter this exploit we can do lots of things, in this case I will just hash the password and add noise over the power analysis. As now each mean values balance out.
+To counter this exploit we can do lots of things, in this case I will just hash the password and add noise over the power analysis because now each mean values balance out. This counter measure is not 100% self-sufficient as going into a DPA should erase the noise but it will take a lot longer for our simple case of SPA.
 
 Alternatives we could also not use any early exit code to change the behavior of the code erasing of displacing the leak point.
 
