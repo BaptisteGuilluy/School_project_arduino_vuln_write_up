@@ -101,6 +101,8 @@ The result of this counter-measure :
 
 We see here that the general distance also increase. (The noise introduced as explained)
 
+The code of this part is contained in the secure_sketch_proposed_ctm.ino file.
+
 ---
 
 
