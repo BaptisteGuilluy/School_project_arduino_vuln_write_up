@@ -40,7 +40,7 @@ The setup shown above serves several purposes. First, it allows the microcontrol
 
 This setup will not be altered during the exploit, as it is entirely sufficient for the task.
  
- 
+ The only change over the chipwhisperer board have been to desolder the pad next to the STM32F0 to reduce measurement noises.
 
  
 ---
